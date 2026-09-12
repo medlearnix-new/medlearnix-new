@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #070b19;
+  --color-surface: #0b1128;
+  --color-accent: #00f2fe;
+  --color-accent-teal: #06b6d4;
+  --font-sans: var(--font-inter);
+  --font-hand: var(--font-caveat);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+}
+
+::selection {
+  background: rgba(0, 242, 254, 0.25);
+  color: #ffffff;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+.animate-float-delay {
+  animation: float-y 7s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.bg-grid-fade {
+  background-image: linear-gradient(
+      to bottom,
+      transparent,
+      var(--color-background) 90%
+    ),
+    linear-gradient(
+      rgba(148, 163, 184, 0.08) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(148, 163, 184, 0.08) 1px,
+      transparent 1px
+    );
+  background-size:
+    100% 100%,
+    40px 40px,
+    40px 40px;
+}
