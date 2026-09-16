@@ -5,66 +5,15 @@ import { Check } from "lucide-react";
 import { Reveal } from "../ui/Reveal";
 import { Button } from "../ui/Button";
 import { cn } from "@/lib/utils";
+import type { PricingPlan } from "@/lib/pricing-data";
 
-interface PlanFeature {
-  label: string;
-  extra?: string;
-}
-
-interface Plan {
-  name: string;
-  price: string;
-  description: string;
-  features: PlanFeature[];
-  cta: string;
-  featured?: boolean;
-  badge?: string;
-}
-
-const PLANS: Plan[] = [
-  {
-    name: "Pro Plan",
-    price: "$49.99",
-    description:
-      "Targeted practice for students focused on core exam review.",
-    features: [
-      { label: "30 Full-Length Practice Exams" },
-      { label: "Unlimited Dosage Calculators" },
-      { label: "Unlimited Drug Reference Tools" },
-      { label: "Unlimited AI Care Plans" },
-      { label: "30 AI Patient Simulations" },
-      { label: "24/7 AI Assistant Support" },
-      { label: "Standard Performance Analytics" },
-    ],
-    cta: "Start Pro Plan",
-  },
-  {
-    name: "Elite Plan",
-    price: "$59.99",
-    description:
-      "Complete access for comprehensive exam preparation and clinical mastery.",
-    featured: true,
-    badge: "Most Popular — Best Value",
-    features: [
-      { label: "50 Full-Length Practice Exams", extra: "+20 Extra" },
-      { label: "Unlimited Dosage Calculators" },
-      { label: "Unlimited Drug Reference Tools" },
-      { label: "Unlimited AI Care Plans" },
-      { label: "40 AI Patient Simulations", extra: "+10 Extra" },
-      { label: "24/7 Priority AI Assistant Support" },
-      { label: "Advanced Diagnostic & Weak-Spot Analytics" },
-    ],
-    cta: "Get Elite Access",
-  },
-];
-
-export function PricingPlans() {
+export function PricingPlans({ plans }: { plans: PricingPlan[] }) {
   return (
     <section className="relative bg-background pb-24">
       <div className="mx-auto max-w-5xl px-6 lg:px-8">
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
-          {PLANS.map((plan, i) => (
-            <Reveal key={plan.name} delay={i * 0.1}>
+          {plans.map((plan, i) => (
+            <Reveal key={plan.slug} delay={i * 0.1}>
               <motion.div
                 whileHover={{ y: -6 }}
                 className={cn(
@@ -85,7 +34,9 @@ export function PricingPlans() {
                   <span className="text-4xl font-bold text-white">
                     {plan.price}
                   </span>
-                  <span className="pb-1 text-sm text-slate-400">/ month</span>
+                  <span className="pb-1 text-sm text-slate-400">
+                    / {plan.billingPeriod}
+                  </span>
                 </div>
                 <p className="mt-4 text-slate-400">{plan.description}</p>
 
@@ -117,7 +68,7 @@ export function PricingPlans() {
                     variant={plan.featured ? "primary" : "outline"}
                     className="w-full justify-center"
                   >
-                    {plan.cta}
+                    {plan.ctaLabel}
                   </Button>
                 </motion.div>
               </motion.div>

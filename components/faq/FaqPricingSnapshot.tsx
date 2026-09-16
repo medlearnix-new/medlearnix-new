@@ -3,47 +3,14 @@
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { PricingPlan } from "@/lib/pricing-data";
 
-interface SnapshotPlan {
-  name: string;
-  price: string;
-  features: string[];
-  cta: string;
-  featured?: boolean;
-}
-
-const PLANS: SnapshotPlan[] = [
-  {
-    name: "Pro Plan",
-    price: "$49.99",
-    features: [
-      "30 Full Exams",
-      "30 Simulations",
-      "Unlimited AI Tools",
-      "24/7 AI Assistance",
-    ],
-    cta: "Get Pro",
-  },
-  {
-    name: "Elite Plan",
-    price: "$59.99",
-    features: [
-      "50 Full Exams",
-      "40 Simulations",
-      "Unlimited AI Tools",
-      "Priority AI Server Access",
-    ],
-    cta: "Get Elite",
-    featured: true,
-  },
-];
-
-export function FaqPricingSnapshot() {
+export function FaqPricingSnapshot({ plans }: { plans: PricingPlan[] }) {
   return (
     <div className="mb-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
-      {PLANS.map((plan) => (
+      {plans.map((plan) => (
         <div
-          key={plan.name}
+          key={plan.slug}
           className={cn(
             "relative rounded-2xl border p-6",
             plan.featured
@@ -60,17 +27,19 @@ export function FaqPricingSnapshot() {
             <h4 className="text-base font-bold text-white">{plan.name}</h4>
             <span className="text-xl font-bold text-white">
               {plan.price}
-              <span className="text-xs font-normal text-slate-400">/mo</span>
+              <span className="text-xs font-normal text-slate-400">
+                /{plan.billingPeriod === "month" ? "mo" : plan.billingPeriod}
+              </span>
             </span>
           </div>
           <ul className="mt-4 flex flex-col gap-2">
             {plan.features.map((feature) => (
               <li
-                key={feature}
+                key={feature.label}
                 className="flex items-center gap-2 text-sm text-slate-300"
               >
                 <Check className="h-3.5 w-3.5 shrink-0 text-accent" />
-                {feature}
+                {feature.label}
               </li>
             ))}
           </ul>
@@ -78,7 +47,7 @@ export function FaqPricingSnapshot() {
             href="/pricing"
             className="mt-5 block rounded-lg border border-slate-700 py-2 text-center text-sm font-semibold text-white transition-colors hover:border-accent/60 hover:bg-accent/5"
           >
-            {plan.cta}
+            {plan.ctaLabel}
           </Link>
         </div>
       ))}

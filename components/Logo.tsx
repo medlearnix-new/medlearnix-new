@@ -1,12 +1,18 @@
-import { Atom } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+import logoMark from "./logoo.png";
 
 export function Logo({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
-      <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10">
-        <div className="absolute inset-0 rounded-xl bg-accent/20 blur-md" />
-        <Atom className="relative h-5 w-5 text-accent" strokeWidth={2.25} />
+      <div className="relative flex h-9 w-9 items-center justify-center rounded-full">
+        <div className="absolute inset-0 scale-110 rounded-full bg-accent/40 blur-md" />
+        <Image
+          src={logoMark}
+          alt="MedLearnix"
+          className="relative h-9 w-9 rounded-full object-cover drop-shadow-[0_0_10px_rgba(0,242,254,0.55)]"
+          priority
+        />
       </div>
       <span className="text-lg font-bold tracking-tight text-white">
         Med<span className="text-accent">Learnix</span>

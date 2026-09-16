@@ -5,10 +5,13 @@ import { Footer } from "@/components/Footer";
 import { CTABanner } from "@/components/CTABanner";
 import { BlogPostContent } from "@/components/blogs/BlogPostContent";
 import { RecentPosts } from "@/components/blogs/RecentPosts";
-import { BLOG_POSTS, getBlogPost, getRelatedPosts } from "@/lib/blog-data";
+import { getAllBlogSlugs, getBlogPost, getRelatedPosts } from "@/lib/blog-data";
+
+export const revalidate = 300;
 
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({ slug: post.slug }));
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -17,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
 
   if (!post) {
     return { title: "Article not found — MedLearnix" };
@@ -35,13 +38,13 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
 
   if (!post) {
     notFound();
   }
 
-  const related = getRelatedPosts(post.slug, 3);
+  const related = await getRelatedPosts(post.slug, 3);
 
   return (
     <main className="min-h-screen bg-background">
