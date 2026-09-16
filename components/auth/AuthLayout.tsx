@@ -42,7 +42,7 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
       <div className="pointer-events-none absolute -bottom-40 right-0 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.1),transparent_65%)] blur-3xl" />
 
       {/* Left: brand panel */}
-      <div className="relative flex w-full flex-col justify-center px-6 py-12 sm:px-10 lg:w-1/2 lg:px-16 lg:py-16 xl:px-24">
+      <div className="relative flex w-full flex-col justify-center px-6 py-10 sm:px-10 lg:w-1/2 lg:px-16 lg:py-10 xl:px-24">
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -57,16 +57,16 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 lg:mt-14"
+          className="mt-6 lg:mt-8"
         >
-          <h1 className="text-4xl font-extrabold leading-[1.1] text-white sm:text-5xl">
+          <h1 className="text-3xl font-extrabold leading-[1.15] text-white sm:text-4xl">
             Study Smarter.
             <br />
             <span className="bg-gradient-to-r from-accent to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(0,242,254,0.35)]">
               Pass with Confidence.
             </span>
           </h1>
-          <p className="mt-4 max-w-md text-lg text-slate-400">
+          <p className="mt-3 max-w-md text-base text-slate-400">
             AI-powered NCLEX prep, built by nurses, for future nurses.
           </p>
         </motion.div>
@@ -75,7 +75,7 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 hidden lg:block"
+          className="mt-6 hidden lg:block"
         >
           <AuthIllustration />
         </motion.div>
@@ -84,14 +84,14 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-10 flex flex-col gap-4 lg:mt-8"
+          className="mt-6 flex flex-col gap-2.5"
         >
           {FEATURES.map((feature) => (
             <div key={feature.title} className="flex items-center gap-3">
               <div
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${feature.gradient} shadow-md shadow-black/30`}
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${feature.gradient} shadow-md shadow-black/30`}
               >
-                <feature.icon className="h-4 w-4 text-white" strokeWidth={2.25} />
+                <feature.icon className="h-3.5 w-3.5 text-white" strokeWidth={2.25} />
               </div>
               <p className="text-sm text-slate-300">
                 <span className="font-semibold text-white">{feature.title}</span>
@@ -103,7 +103,7 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Right: form panel */}
-      <div className="relative flex w-full flex-1 items-center justify-center px-6 py-12 sm:px-10 lg:w-1/2 lg:px-16 lg:py-16">
+      <div className="relative flex w-full flex-1 items-center justify-center px-6 py-10 sm:px-10 lg:w-1/2 lg:px-16 lg:py-10">
         {children}
       </div>
     </div>
