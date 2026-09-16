@@ -19,5 +19,7 @@ export const resend = new Resend(apiKey);
  * should get the response instead). */
 export const MAIL_FROM = "MedLearnix <noreply@medlearnix.com>";
 /** The team's real inbox — where contact-form notifications land and where
- * auto-replies point people if they hit "reply". */
-export const MAIL_TO = "hello@medlearnix.com";
+ * auto-replies point people if they hit "reply". Using a Gmail inbox for now
+ * since medlearnix.com has no receiving mailbox set up yet; swap this back
+ * to hello@medlearnix.com once that's configured. */
+export const MAIL_TO = "medlearnix@gmail.com";
