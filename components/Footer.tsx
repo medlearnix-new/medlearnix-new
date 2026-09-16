@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Mail } from "lucide-react";
 import { Logo } from "./Logo";
 import {
@@ -8,17 +9,15 @@ import {
 } from "./icons/SocialIcons";
 
 const QUICK_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "Features", href: "#features" },
-  { label: "Courses", href: "#courses" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Home", href: "/" },
+  { label: "Courses", href: "/courses" },
+  { label: "Pricing", href: "/pricing" },
 ];
 
 const MORE_LINKS = [
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Blog", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: "Blogs", href: "/blogs" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 const SOCIALS = [
@@ -45,12 +44,12 @@ export function Footer() {
             <ul className="mt-4 flex flex-col gap-2.5">
               {QUICK_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-slate-500 transition-colors hover:text-accent"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -63,12 +62,12 @@ export function Footer() {
             <ul className="mt-4 flex flex-col gap-2.5 sm:mt-4">
               {MORE_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-slate-500 transition-colors hover:text-accent"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -110,9 +109,9 @@ export function Footer() {
             <a href="#" className="transition-colors hover:text-accent">
               Terms of Service
             </a>
-            <a href="#" className="transition-colors hover:text-accent">
+            <Link href="/contact" className="transition-colors hover:text-accent">
               Contact
-            </a>
+            </Link>
           </div>
           <p className="font-hand text-base text-cyan-200/70">
             More nurses. A brighter tomorrow. <span className="text-pink-300">♡</span>

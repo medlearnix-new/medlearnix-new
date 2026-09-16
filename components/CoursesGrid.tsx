@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Stethoscope,
@@ -87,13 +88,13 @@ export function CoursesGrid() {
               topics.
             </p>
           </div>
-          <a
-            href="#"
+          <Link
+            href="/courses"
             className="flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
           >
             View All Courses
             <ArrowRight className="h-4 w-4" />
-          </a>
+          </Link>
         </Reveal>
 
         <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

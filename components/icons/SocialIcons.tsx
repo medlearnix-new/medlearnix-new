@@ -72,3 +72,16 @@ export function LinkedinIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function XIcon(props: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      stroke="none"
+      {...props}
+    >
+      <path d="M18.3 3H21l-6.4 7.3L22 21h-6.6l-5.2-6.6L4.2 21H1.5l6.9-7.9L1 3h6.7l4.7 6.1L18.3 3zm-1.1 16.1h1.5L7 4.8H5.4l11.8 14.3z" />
+    </svg>
+  );
+}
