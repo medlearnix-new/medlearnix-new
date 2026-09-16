@@ -78,15 +78,14 @@ function CourseMockup() {
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className="relative"
       >
-        <div className="relative overflow-hidden rounded-2xl border border-accent/20 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
-          <div className="pointer-events-none absolute inset-0 rounded-2xl shadow-[0_0_60px_rgba(0,242,254,0.15)_inset]" />
+        <div className="relative aspect-[940/660] overflow-hidden rounded-2xl border border-accent/20 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
+          <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl shadow-[0_0_60px_rgba(0,242,254,0.15)_inset]" />
           <Image
             src="/images/courses-hero.png"
             alt="MedLearnix NCLEX-PN case study dashboard — patient assessment, drug tool panel, and answer choices"
-            width={1672}
-            height={940}
+            fill
             priority
-            className="h-auto w-full select-none"
+            className="select-none object-cover"
           />
         </div>
 
