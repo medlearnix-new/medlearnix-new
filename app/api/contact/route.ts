@@ -69,6 +69,7 @@ export async function POST(request: Request) {
     await resend.emails.send({
       from: MAIL_FROM,
       to: email,
+      replyTo: MAIL_TO,
       subject: "We've received your message — MedLearnix",
       html: `
         <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937;">
