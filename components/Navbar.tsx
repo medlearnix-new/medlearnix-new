@@ -70,12 +70,16 @@ export function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button variant="outline" size="md">
-            Sign In
-          </Button>
-          <Button variant="primary" size="md">
-            Start Free
-          </Button>
+          <Link href="/login">
+            <Button variant="outline" size="md">
+              Sign In
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button variant="primary" size="md">
+              Start Free
+            </Button>
+          </Link>
         </div>
 
         <button
@@ -113,12 +117,16 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="mt-3 flex flex-col gap-3">
-                <Button variant="outline" className="w-full">
-                  Sign In
-                </Button>
-                <Button variant="primary" className="w-full">
-                  Start Free
-                </Button>
+                <Link href="/login" className="block" onClick={() => setMenuOpen(false)}>
+                  <Button variant="outline" className="w-full">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/signup" className="block" onClick={() => setMenuOpen(false)}>
+                  <Button variant="primary" className="w-full">
+                    Start Free
+                  </Button>
+                </Link>
               </div>
             </div>
           </motion.div>

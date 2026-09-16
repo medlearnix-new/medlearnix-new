@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Reveal } from "./ui/Reveal";
@@ -33,10 +34,12 @@ export function CTABanner() {
             whileTap={{ scale: 0.98 }}
             className="relative mt-8 inline-block"
           >
-            <Button variant="primary" size="lg">
-              Start Free Today
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+            <Link href="/signup">
+              <Button variant="primary" size="lg">
+                Start Free Today
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </Reveal>

@@ -2,6 +2,7 @@
 
 import { useRef, type MouseEvent } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   motion,
   useMotionValue,
@@ -167,9 +168,11 @@ export function CoursesHero() {
 
           <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-4">
             <motion.div whileHover={{ y: -3, scale: 1.02 }} whileTap={{ scale: 0.97 }}>
-              <Button variant="primary" size="lg">
-                Start Free Trial
-              </Button>
+              <Link href="/signup">
+                <Button variant="primary" size="lg">
+                  Start Free Trial
+                </Button>
+              </Link>
             </motion.div>
             <motion.div whileHover={{ y: -3, scale: 1.02 }} whileTap={{ scale: 0.97 }}>
               <Button variant="outline" size="lg">

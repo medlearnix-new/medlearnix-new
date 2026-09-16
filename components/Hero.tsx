@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, Flame, PlayCircle, Trophy } from "lucide-react";
 import { Button } from "./ui/Button";
@@ -52,10 +53,12 @@ export function Hero() {
 
           <div className="mt-9 flex flex-col gap-4 sm:flex-row">
             <motion.div whileHover={{ y: -4, scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button variant="primary" size="lg" className="w-full sm:w-auto">
-                Start Free Today
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              <Link href="/signup">
+                <Button variant="primary" size="lg" className="w-full sm:w-auto">
+                  Start Free Today
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
             </motion.div>
             <motion.div whileHover={{ y: -4, scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
