@@ -1,10 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Clock, CheckCircle2, Circle } from "lucide-react";
+import { Clock, CheckCircle2, Circle, Pill, HeartPulse, Stethoscope, ClipboardCheck } from "lucide-react";
 import { Reveal } from "../ui/Reveal";
 import { cn } from "@/lib/utils";
-import type { StudyTask } from "@/lib/dashboard-data";
+import type { StudyTask, StudyItemType } from "@/lib/dashboard-data";
+
+const ITEM_TYPE_ICON: Record<StudyItemType, typeof Pill> = {
+  practice: Pill,
+  lesson: HeartPulse,
+  case_study: Stethoscope,
+  review: ClipboardCheck,
+};
 
 export function StudyPlanCard({
   tasks,
@@ -71,7 +78,10 @@ export function StudyPlanCard({
               </button>
 
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                <task.icon className="h-4 w-4 text-accent" />
+                {(() => {
+                  const Icon = ITEM_TYPE_ICON[task.itemType];
+                  return <Icon className="h-4 w-4 text-accent" />;
+                })()}
               </div>
 
               <div className="min-w-0 flex-1">

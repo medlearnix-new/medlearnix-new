@@ -4,15 +4,19 @@ import { Menu, Search, CalendarClock, Flame } from "lucide-react";
 import { motion } from "framer-motion";
 import { NotificationDropdown } from "./NotificationDropdown";
 import { ProfileDropdown } from "./ProfileDropdown";
-import { NOTIFICATIONS, NCLEX_COUNTDOWN_DAYS, STUDY_STREAK_DAYS } from "@/lib/dashboard-data";
+import { NOTIFICATIONS } from "@/lib/dashboard-data";
 
 export function Header({
   name,
   email,
+  streakDays,
+  countdownDays,
   onOpenMobileNav,
 }: {
   name: string;
   email: string;
+  streakDays: number;
+  countdownDays: number | null;
   onOpenMobileNav: () => void;
 }) {
   return (
@@ -43,25 +47,29 @@ export function Header({
         </button>
 
         <div className="ml-auto flex items-center gap-2.5 sm:ml-4">
-          <div
-            title={`${NCLEX_COUNTDOWN_DAYS} days until your target NCLEX date`}
-            className="hidden items-center gap-1.5 rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 text-xs font-semibold text-accent md:flex"
-          >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-            </span>
-            <CalendarClock className="h-3.5 w-3.5" />
-            NCLEX in {NCLEX_COUNTDOWN_DAYS} days
-          </div>
+          {countdownDays !== null && (
+            <div
+              title={`${countdownDays} days until your target NCLEX date`}
+              className="hidden items-center gap-1.5 rounded-full border border-accent/20 bg-accent/5 px-3 py-1.5 text-xs font-semibold text-accent md:flex"
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+              </span>
+              <CalendarClock className="h-3.5 w-3.5" />
+              {countdownDays >= 0
+                ? `NCLEX in ${countdownDays} days`
+                : "NCLEX date has passed"}
+            </div>
+          )}
 
           <motion.div
             whileHover={{ scale: 1.04 }}
-            title={`${STUDY_STREAK_DAYS}-day study streak`}
+            title={`${streakDays}-day study streak`}
             className="hidden items-center gap-1.5 rounded-full border border-orange-400/20 bg-orange-400/5 px-3 py-1.5 text-xs font-semibold text-orange-300 sm:flex"
           >
             <Flame className="h-3.5 w-3.5" />
-            {STUDY_STREAK_DAYS} Days 🔥
+            {streakDays} {streakDays === 1 ? "Day" : "Days"} 🔥
           </motion.div>
 
           <NotificationDropdown notifications={NOTIFICATIONS} />

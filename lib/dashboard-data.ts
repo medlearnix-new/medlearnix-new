@@ -1,30 +1,19 @@
-// Study analytics (readiness score, question history, streaks, Smart CAT
-// results, notifications) aren't backed by real tracking tables yet — there's
-// no question bank or session-logging system in this project. Everything
-// below is illustrative demo data, shaped like the real thing will be, so
-// the UI can be wired to a real analytics backend later without changing
-// component contracts. Anywhere we *do* have real data (name, struggle
-// areas from onboarding) is used instead of a placeholder.
+// Fallback/demo dashboard content, used only when a user's real data in
+// Supabase (study_plans, user_mastery, activity_events) is empty — which is
+// expected for most users today, since no quiz/practice feature exists yet
+// to generate real mastery or activity data. See lib/dashboard-queries.ts
+// for the real-data-first, fallback-second fetching logic.
 
-import type { LucideIcon } from "lucide-react";
-import {
-  Pill,
-  HeartPulse,
-  Stethoscope,
-  ClipboardCheck,
-  AlertTriangle,
-  CalendarClock,
-  Sparkles,
-} from "lucide-react";
+export type StudyItemType = "practice" | "lesson" | "case_study" | "review";
 
 export interface StudyTask {
   id: string;
   subject: string;
+  itemType: StudyItemType;
   title: string;
   meta: string;
   reason?: string;
   actionLabel: string;
-  icon: LucideIcon;
   completed: boolean;
 }
 
@@ -43,72 +32,73 @@ export interface MasteryCategory {
   flagged?: boolean;
 }
 
-export const QUICK_STATS = {
+export const FALLBACK_QUICK_STATS = {
   questionsCompleted: 1247,
   averageScore: 78,
   studyTimeThisWeek: "4h 32m",
   courseCompletion: 43,
 };
 
-export const READINESS = {
+export const FALLBACK_READINESS = {
   percent: 74,
   label: "Moderate Readiness",
 };
 
-export const STUDY_STREAK_DAYS = 12;
-export const NCLEX_COUNTDOWN_DAYS = 32;
+export const FALLBACK_STREAK_DAYS = 12;
+export const FALLBACK_COUNTDOWN_DAYS = 32;
+export const FALLBACK_ESTIMATED_MINUTES = 48;
 
-export function getStudyPlan(struggleAreas: string[]): StudyTask[] {
+export function getFallbackStudyPlan(struggleAreas: string[]): StudyTask[] {
   const primaryStruggle = struggleAreas[0];
   const secondaryStruggle = struggleAreas[1];
 
   return [
     {
-      id: "pharm-anticoagulants",
+      id: "fallback-pharm-anticoagulants",
       subject: "Pharmacology",
+      itemType: "practice",
       title: "Anticoagulants",
       meta: "10 questions",
       reason: primaryStruggle
         ? `Why: You told us ${primaryStruggle} is a focus area.`
         : "Why: You scored 58% on this topic recently.",
       actionLabel: "Start Practice",
-      icon: Pill,
       completed: true,
     },
     {
-      id: "med-surg-heart-failure",
+      id: "fallback-med-surg-heart-failure",
       subject: "Med-Surg",
+      itemType: "lesson",
       title: "Heart Failure",
       meta: "12-minute lesson",
       reason: secondaryStruggle
         ? `Why: Related to ${secondaryStruggle}, one of your focus areas.`
         : "Why: Smart CAT identified cardiovascular as a weak area.",
       actionLabel: "Continue Lesson",
-      icon: HeartPulse,
       completed: false,
     },
     {
-      id: "ngn-respiratory",
+      id: "fallback-ngn-respiratory",
       subject: "NGN Case Study",
+      itemType: "case_study",
       title: "Respiratory Deterioration",
       meta: "1 case",
       actionLabel: "Start Case",
-      icon: Stethoscope,
       completed: false,
     },
     {
-      id: "mistake-review",
+      id: "fallback-mistake-review",
       subject: "Mistake Review",
+      itemType: "review",
       title: "Previously missed questions",
       meta: "6 questions",
       actionLabel: "Review Mistakes",
-      icon: ClipboardCheck,
       completed: false,
     },
   ];
 }
 
-export function getMasteryCategories(struggleAreas: string[]): MasteryCategory[] {
+export function getFallbackMasteryCategories(struggleAreas: string[]): MasteryCategory[] {
   const flaggedSet = new Set(struggleAreas.map((s) => s.toLowerCase()));
   const base: MasteryCategory[] = [
     { name: "Pharmacology", percent: 61 },
@@ -122,6 +112,7 @@ export function getMasteryCategories(struggleAreas: string[]): MasteryCategory[]
   }));
 }
 
+// Not backed by a table requested in this pass — always illustrative.
 export const NOTIFICATIONS: DashboardNotification[] = [
   {
     id: "n1",
@@ -149,7 +140,6 @@ export const NOTIFICATIONS: DashboardNotification[] = [
 ];
 
 export const SMART_ALERT = {
-  icon: AlertTriangle,
   message:
     "Pattern detected: You've missed 4 questions involving potassium and cardiac medications.",
   actionLabel: "Review Concept",
@@ -165,6 +155,3 @@ export const SMART_CAT = {
   lastScore: 72,
   nextInDays: 3,
 };
-
-export const COUNTDOWN_ICON = CalendarClock;
-export const STREAK_ICON = Sparkles;

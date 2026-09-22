@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { HelpCircle, TrendingUp, Clock3, GraduationCap } from "lucide-react";
 import { Reveal } from "../ui/Reveal";
 import { StatCard } from "./StatCard";
@@ -11,35 +11,69 @@ import { ContinueCourseCard } from "./ContinueCourseCard";
 import { SmartCatCard } from "./SmartCatCard";
 import { CategoryMasteryCard } from "./CategoryMasteryCard";
 import { NextActionCard } from "./NextActionCard";
+import { createClient } from "@/lib/supabase/client";
 import {
-  QUICK_STATS,
-  READINESS,
   SMART_ALERT,
   CONTINUE_COURSE,
   SMART_CAT,
-  getStudyPlan,
-  getMasteryCategories,
+  type StudyTask,
+  type MasteryCategory,
 } from "@/lib/dashboard-data";
+import type { QuickStats } from "@/lib/dashboard-queries";
 
 export function DashboardContent({
   firstName,
-  struggleAreas,
+  readiness,
+  quickStats,
+  tasks: initialTasks,
+  planId,
+  estimatedMinutes,
+  masteryCategories,
 }: {
   firstName: string;
-  struggleAreas: string[];
+  readiness: { percent: number; label: string };
+  quickStats: QuickStats;
+  tasks: StudyTask[];
+  planId: string | null;
+  estimatedMinutes: number;
+  masteryCategories: MasteryCategory[];
 }) {
-  // Icon components can't cross the Server → Client Component boundary as
-  // props, so this data (which embeds Lucide icon references) is built
-  // here on the client from the serializable struggleAreas prop instead of
-  // being computed in the Server Component page.
-  const [tasks, setTasks] = useState(() => getStudyPlan(struggleAreas));
-  const masteryCategories = useMemo(() => getMasteryCategories(struggleAreas), [struggleAreas]);
+  const [tasks, setTasks] = useState(initialTasks);
   const planRef = useRef<HTMLDivElement>(null);
 
-  function toggleTask(id: string) {
+  async function toggleTask(id: string) {
+    const task = tasks.find((t) => t.id === id);
+    if (!task) return;
+    const nextCompleted = !task.completed;
+
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
+      prev.map((t) => (t.id === id ? { ...t, completed: nextCompleted } : t))
     );
+
+    // Only persist when this task is backed by a real study_plan_items row
+    // (planId is null when we're showing the illustrative fallback plan —
+    // there's nothing in the database to update).
+    if (!planId) return;
+
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    await supabase
+      .from("study_plan_items")
+      .update({
+        is_completed: nextCompleted,
+        completed_at: nextCompleted ? new Date().toISOString() : null,
+      })
+      .eq("id", id);
+
+    await supabase.from("activity_events").insert({
+      user_id: user.id,
+      event_type: nextCompleted ? "study_plan_item_completed" : "study_plan_item_reopened",
+      metadata: { study_plan_item_id: id, subject: task.subject, title: task.title },
+    });
   }
 
   function scrollToPlan() {
@@ -60,29 +94,29 @@ export function DashboardContent({
 
       {/* Readiness + quick stats */}
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.3fr)_repeat(4,minmax(0,1fr))]">
-        <ReadinessCard percent={READINESS.percent} label={READINESS.label} />
+        <ReadinessCard percent={readiness.percent} label={readiness.label} />
         <StatCard
           icon={HelpCircle}
           label="Questions Completed"
-          value={QUICK_STATS.questionsCompleted.toLocaleString()}
+          value={quickStats.questionsCompleted.toLocaleString()}
           delay={0.05}
         />
         <StatCard
           icon={TrendingUp}
           label="Average Score"
-          value={`${QUICK_STATS.averageScore}%`}
+          value={`${quickStats.averageScore}%`}
           delay={0.1}
         />
         <StatCard
           icon={Clock3}
           label="Study Time This Week"
-          value={QUICK_STATS.studyTimeThisWeek}
+          value={quickStats.studyTimeThisWeek}
           delay={0.15}
         />
         <StatCard
           icon={GraduationCap}
           label="Course Completion"
-          value={`${QUICK_STATS.courseCompletion}%`}
+          value={`${quickStats.courseCompletion}%`}
           delay={0.2}
         />
       </div>
@@ -95,7 +129,11 @@ export function DashboardContent({
       {/* Study plan + side widgets */}
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div ref={planRef}>
-          <StudyPlanCard tasks={tasks} onToggleTask={toggleTask} estimatedMinutes={48} />
+          <StudyPlanCard
+            tasks={tasks}
+            onToggleTask={toggleTask}
+            estimatedMinutes={estimatedMinutes}
+          />
         </div>
 
         <div className="flex flex-col gap-4">

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { AlertTriangle } from "lucide-react";
 import { Reveal } from "../ui/Reveal";
 import type { SMART_ALERT as SmartAlertType } from "@/lib/dashboard-data";
 
@@ -9,7 +10,7 @@ export function SmartAlertBanner({ alert }: { alert: typeof SmartAlertType }) {
     <Reveal delay={0.2}>
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-5 sm:flex-row sm:items-center">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
-          <alert.icon className="h-5 w-5 text-amber-400" />
+          <AlertTriangle className="h-5 w-5 text-amber-400" />
         </div>
         <p className="flex-1 text-sm text-amber-100/90">{alert.message}</p>
         <motion.button
