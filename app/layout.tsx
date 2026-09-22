@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Caveat } from "next/font/google";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -29,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
       <body className="bg-background font-sans text-white antialiased">
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );

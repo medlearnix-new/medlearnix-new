@@ -32,18 +32,24 @@ export function LoginForm() {
       return;
     }
 
-    const explicitNext = searchParams.get("next");
-    if (explicitNext) {
-      router.push(explicitNext);
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role, onboarding_completed")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+    if (profile?.role === "admin") {
+      router.push("/admin/dashboard");
       router.refresh();
       return;
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("onboarding_completed")
-      .eq("id", data.user.id)
-      .maybeSingle();
+    const explicitNext = searchParams.get("next");
+    if (explicitNext && !explicitNext.startsWith("/admin")) {
+      router.push(explicitNext);
+      router.refresh();
+      return;
+    }
 
     router.push(profile?.onboarding_completed ? "/dashboard" : "/onboarding");
     router.refresh();

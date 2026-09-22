@@ -47,6 +47,28 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
+
+  if (isAdminPath) {
+    if (!user) {
+      const redirectUrl = new URL("/login", request.url);
+      redirectUrl.searchParams.set("next", request.nextUrl.pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profile?.role !== "admin") {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
+    return response;
+  }
+
   const isProtected = PROTECTED_PATHS.some(
     (path) => request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(`${path}/`)
   );
