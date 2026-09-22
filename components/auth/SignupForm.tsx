@@ -16,7 +16,7 @@ import {
 import { AuthField } from "./AuthField";
 import { AuthCard } from "./AuthCard";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 const STRENGTH_LABELS = ["Too short", "Weak", "Fair", "Good", "Strong"];
 const STRENGTH_COLORS = [
@@ -65,10 +65,14 @@ export function SignupForm() {
     }
 
     setLoading(true);
+    const supabase = createClient();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: name } },
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
+      },
     });
     setLoading(false);
 
@@ -78,7 +82,7 @@ export function SignupForm() {
     }
 
     if (data.session) {
-      router.push("/");
+      router.push("/onboarding");
       router.refresh();
       return;
     }

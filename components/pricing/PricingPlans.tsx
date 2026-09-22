@@ -10,14 +10,14 @@ import type { PricingPlan } from "@/lib/pricing-data";
 export function PricingPlans({ plans }: { plans: PricingPlan[] }) {
   return (
     <section className="relative bg-background pb-24">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {plans.map((plan, i) => (
             <Reveal key={plan.slug} delay={i * 0.1}>
               <motion.div
                 whileHover={{ y: -6 }}
                 className={cn(
-                  "relative flex h-full flex-col rounded-2xl border p-10",
+                  "relative flex h-full flex-col rounded-2xl border p-8 lg:p-10",
                   plan.featured
                     ? "border-accent/50 bg-slate-900/80 shadow-[0_0_40px_rgba(0,242,254,0.15)]"
                     : "border-slate-800/80 bg-slate-900/60"
@@ -35,7 +35,7 @@ export function PricingPlans({ plans }: { plans: PricingPlan[] }) {
                     {plan.price}
                   </span>
                   <span className="pb-1 text-sm text-slate-400">
-                    / {plan.billingPeriod}
+                    {plan.billingPeriod === "forever" ? "forever" : `/ ${plan.billingPeriod}`}
                   </span>
                 </div>
                 <p className="mt-4 text-slate-400">{plan.description}</p>

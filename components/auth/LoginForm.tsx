@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Mail, Lock, Loader2, AlertCircle, ArrowRight, CheckCircle2 } from "lucide-react";
 import { AuthField } from "./AuthField";
 import { AuthCard } from "./AuthCard";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,15 +23,29 @@ export function LoginForm() {
     setError(null);
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
+    if (error || !data.user) {
       setLoading(false);
-      setError(error.message);
+      setError(error?.message ?? "Something went wrong. Please try again.");
       return;
     }
 
-    router.push("/");
+    const explicitNext = searchParams.get("next");
+    if (explicitNext) {
+      router.push(explicitNext);
+      router.refresh();
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarding_completed")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+    router.push(profile?.onboarding_completed ? "/dashboard" : "/onboarding");
     router.refresh();
   }
 
@@ -40,6 +55,7 @@ export function LoginForm() {
       return;
     }
     setResetState("sending");
+    const supabase = createClient();
     const { error } = await supabase.auth.resetPasswordForEmail(email);
     setResetState(error ? "error" : "sent");
   }
