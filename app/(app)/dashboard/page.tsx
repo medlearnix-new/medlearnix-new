@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dashboard — MedLearnix",
-  description: "Your MedLearnix study dashboard.",
+  description: "Your personalized MedLearnix study dashboard.",
 };
 
 export default async function DashboardPage() {
@@ -15,27 +15,18 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login?next=/dashboard");
+    redirect("/login");
   }
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, level, preparation_target, struggle_areas, selected_plan, onboarding_completed")
+    .select("full_name, struggle_areas")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (!profile?.onboarding_completed) {
-    redirect("/onboarding");
-  }
+  const firstName =
+    profile?.full_name?.split(" ")[0] || user.email?.split("@")[0] || "there";
+  const struggleAreas = profile?.struggle_areas ?? [];
 
-  return (
-    <DashboardContent
-      email={user.email ?? ""}
-      fullName={profile.full_name}
-      level={profile.level}
-      preparationTarget={profile.preparation_target}
-      struggleAreas={profile.struggle_areas ?? []}
-      selectedPlan={profile.selected_plan}
-    />
-  );
+  return <DashboardContent firstName={firstName} struggleAreas={struggleAreas} />;
 }
